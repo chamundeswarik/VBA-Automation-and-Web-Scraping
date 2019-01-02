@@ -1,0 +1,82 @@
+package Automation.selenium;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.Select;
+
+public class CropInsuranceCalculator {
+
+	private static WebDriver driver;
+	public static void main(String[] args) {
+	
+		
+		String seasondrpdwn="//*[@id=\"app\"]/div/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div/div/div/div/div[2]/form/div/div/div[1]/div/select";
+		String yeardrpdwn="//*[@id=\"app\"]/div/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div/div/div/div/div[2]/form/div/div/div[2]/div/select";
+		String schemedrpdwn="//*[@id=\"app\"]/div/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div/div/div/div/div[2]/form/div/div/div[3]/div/select";
+		String statedrpdwn="//*[@id=\"app\"]/div/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div/div/div/div/div[2]/form/div/div/div[4]/div/select";
+		String districtdrpdwn="//*[@id=\"app\"]/div/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div/div/div/div/div[2]/form/div/div/div[5]/div/select";
+		String cropdrpdown="//*[@id=\"app\"]/div/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div/div/div/div/div[2]/form/div/div/div[6]/div/select";
+		
+		//The below variables are the options u have to set. So whatever u read from excel, set in below variables.
+		String season="Kharif";
+		String year="2017";
+		String scheme="Pradhan Mantri Fasal Bima Yojana";
+		String state="Bihar";
+		String district="Arwal";
+		String crop="Paddy (Dhan)";
+		String area="20";
+		
+		
+		
+		
+		
+		System.setProperty("webdriver.chrome.driver","drivers//chromedriver.exe");
+		
+		driver = new ChromeDriver();
+		driver.manage().window().maximize();
+		driver.get("https://pmfby.gov.in/");
+		setSleep(5000);
+		driver.findElement(By.xpath("//*[@id=\"ciList\"]/li[2]/a[2]")).click();
+		setSleep(2000);
+		selectDropdown(seasondrpdwn, season);
+		setSleep(1000);
+		selectDropdown(yeardrpdwn, year);
+		setSleep(1000);
+		selectDropdown(schemedrpdwn, scheme);
+		setSleep(1000);
+		selectDropdown(statedrpdwn, state);
+		setSleep(1000);
+		selectDropdown(districtdrpdwn, district);
+		setSleep(1000);
+		selectDropdown(cropdrpdown, crop);
+		
+		driver.findElement(By.xpath("//*[@id=\"app\"]/div/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div/div/div/div/div[2]/form/div/div/div[7]/div/input")).sendKeys(area);
+		setSleep(1000);
+		driver.findElement(By.xpath("//*[@id=\"app\"]/div/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div/div/div/div/div[3]/div/button[2]")).click();
+		setSleep(2000);
+		
+		
+		//The below variables are your output which you have to write in Excel.
+		String sumInsured=driver.findElement(By.xpath("//*[@id='app']/div/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div/div/div/div/div[2]/div[2]/div/table/tbody/tr/td[5]")).getText();
+		String premiumByGovt=driver.findElement(By.xpath("//*[@id='app']/div/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div/div/div/div/div[2]/div[2]/div/table/tbody/tr/td[4]")).getText();
+		String premiumByFarmer=driver.findElement(By.xpath("//*[@id='app']/div/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div/div/div/div/div[2]/div[2]/div/table/tbody/tr/td[3]")).getText();
+		String acturialRate=driver.findElement(By.xpath("//*[@id='app']/div/div[1]/div/div[2]/div[3]/div/div/div/div[2]/div/div/div/div/div[2]/div[1]/div/table/tbody/tr/td[4]")).getText();
+		System.out.println(sumInsured+" "+premiumByFarmer+" "+premiumByGovt+" "+acturialRate);
+	}
+	
+	
+	private static void setSleep(int time) {
+		try {
+			Thread.sleep(time);
+		}catch(Exception e) {
+			System.out.println("TimeOut");
+		}
+	}
+	
+	private static void selectDropdown(String dropdown, String optionToSelect) {
+		Select select = new Select(driver.findElement(By.xpath(dropdown)));
+		select.selectByVisibleText(optionToSelect);
+	}
+}
+	
