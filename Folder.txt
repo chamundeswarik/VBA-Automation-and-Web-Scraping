@@ -1,0 +1,32 @@
+Sub ListFolderNames()
+
+Dim varDirectory As Variant
+Dim flag As Boolean
+Dim i As Integer
+Dim n As Integer
+Dim strDirectory As String
+
+i = 1
+n = 3
+
+While Not IsEmpty(Worksheets("Trade folder").Cells(n, 1))
+    strDirectory = ThisWorkbook.Worksheets("Trade folder").Cells(n, 1).Value
+    flag = True
+    varDirectory = Dir(strDirectory, vbDirectory)
+
+    While flag = True
+        If varDirectory = "" Then
+            flag = False
+        Else
+            ThisWorkbook.Worksheets("List of folders").Cells(i + 1, 1) = varDirectory
+            ThisWorkbook.Worksheets("List of folders").Cells(i + 1, 2) = strDirectory + varDirectory
+            'returns the next file or directory in the path
+            varDirectory = Dir
+            i = i + 1
+        End If
+    Wend
+    n = n + 1
+    strDirectory = ThisWorkbook.Worksheets("Trade folder").Cells(n, 1).Value
+Wend
+
+End Sub
