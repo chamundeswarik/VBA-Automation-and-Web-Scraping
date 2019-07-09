@@ -1,0 +1,38 @@
+Sub CreateFileList()
+
+Dim WS As Worksheet
+Dim subFolder As String
+Dim i As Integer
+Dim varDirectory As Variant
+Dim flag As Boolean
+Dim strDirectory As String
+Dim j As Integer
+
+j = 2
+i = 1
+
+Set WS = ThisWorkbook.Worksheets("List of files")
+
+While ThisWorkbook.Worksheets("List of folders").Cells(j, 1) <> ""
+    subFolder = ThisWorkbook.Worksheets("List of folders").Cells(j, 1)
+    strDirectory = ThisWorkbook.Worksheets("List of folders").Cells(j, 2) & "\"
+
+    flag = True
+    varDirectory = Dir(strDirectory)
+
+    While flag = True
+        If varDirectory = "" Then
+        flag = False
+            Else
+        WS.Cells(i + 1, 1) = varDirectory
+        WS.Cells(i + 1, 2) = strDirectory + varDirectory
+        'returns the next file or directory in the path
+        varDirectory = Dir
+        i = i + 1
+        End If
+    Wend
+    j = j + 1
+
+Wend
+
+End Sub
