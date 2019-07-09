@@ -1,0 +1,11 @@
+Sub Clearcell()
+Dim Rng As Range
+    Set Rng = ActiveSheet.Range("A1")
+
+    Dim i As Long
+    For i = 1 To 10
+        If Rng.Cells(i, 1) = "blank" Then
+           Rng.Cells(i, 1).ClearContents
+        End If
+    Next i
+End Sub
